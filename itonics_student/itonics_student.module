@@ -1,0 +1,148 @@
+
+<?php
+  /**
+   * Implements hook_menu
+   */
+  function itonics_student_menu(){
+    $items = [];
+    $items['itonics_student'] = [
+      'title' => 'Student welcome message',
+      'page callback' => 'itonics_student_welcomessss',
+      'page arguments' => ['one', 'two'],
+      'access callback' => TRUE
+    ];
+
+    $items['itonics_student/student_form'] = [
+      'title' => 'Student registration form',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('itonics_student_form'),
+    'access callback' => TRUE
+    ];
+
+    $items['itonics_student/student_list'] = [
+      'title' => 'Student list',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('itonics_student_records'),
+    'access callback' => TRUE
+    ];
+
+
+  return $items;
+}
+function itonics_student_welcomessss($param1, $param2) {
+echo "$param1 - $param2";
+}
+
+function itonics_student_form($form, &$form_state) {
+
+  $form['student_name'] = [
+    '#type' => 'textfield',
+    '#title' => 'Text Field',
+    '#maxlength' => 10
+
+  ];
+
+$form['student_abstract'] = [
+  '#type' => 'textarea',
+  '#title' => 'Text Area',
+  '#required' => TRUE,
+
+];
+
+$form['student_single_checkbox'] = [
+  '#type' => 'checkbox',
+  '#title' => 'Single_Checkbox',
+  '#required' => TRUE,
+
+];
+
+$form['student_single_checkbox'] = [
+  '#type' => 'checkbox',
+  '#title' => 'Single_Checkbox',
+  '#options' => [
+    'option1',
+    'option2',
+    'option3'
+  ],
+  '#required' => TRUE,
+];
+
+$form['student_radios'] = [
+  '#type' => 'radios',
+  '#title' => 'Radioboxes',
+  '#required' => TRUE,
+
+];
+
+$form['student_radios'] = [
+  '#type' => 'radios',
+  '#title' => 'Radioboxes',
+  '#options' => [
+    'option1',
+    'option2',
+    'option3'
+  ],
+  '#required' => TRUE,
+];
+
+$form['student_select_combobox'] = [
+  '#type' => 'select',
+  '#title' => 'Select/Combox',
+  '#options' => [
+    'option1',
+    'option2',
+    'option3'
+  ],
+  '#required' => TRUE,
+];
+
+  $form['submit'] = [
+    '#type' => 'submit',
+    '#value' =>'Submit',
+  ];
+
+  return $form;
+}
+
+function itonics_student_form_validate($form, &$form_state) {
+  $student_name =$form_state['values']['student_name'];
+  $student_abstract =$form_state['values']['student_abstract'];
+  if(empty($student_name)){
+    form_set_error('student_name','Student name field is required');
+    }
+    else{
+    if(strlen($student_name)>5){
+      form_set_error('student_name','Student name field input exceedded max length');
+    }
+  if(!empty($student_abstract)){
+    form_set_error('student_abstract','Student abstractis is not required');
+  }
+ }
+}
+function itonics_student_form_submit($form, &$form_state) {
+  echo 'Student first name:'- $form_state['values']['student_name'];
+  echo 'Student first name:'- $form_state['values']['student_abstract'];
+  echo 'Student first name:'- $form_state['values']['student_single_checkbox'];
+  echo 'Student first name:'- $form_state['values']['student_checkboxes'];
+  echo 'Student first name:'- $form_state['values']['student_single_radiobox'];
+  echo 'Student first name:'- $form_state['values']['student_radios'];
+  echo 'Student first name:'- $form_state['values']['student_select_combobox'];
+
+}
+
+function itonics_student_records(){
+  $rows = [];
+  $header = array(
+   t('Student Name'),
+   t('Email Address'),
+   t('Location'),
+   t('Actions')
+  );
+  $rows[] = [
+    t('ITONICS'),
+    t('itonics@itonics.de'),
+    t('Anamnagar'),
+    l('<span>'.t('Edit').'</span>', '#', ['attributes' => ['class' => ['edit', 'btn'], 'data-text' => ['value 1']], 'html' => TRUE]). l(t('Delete'), '#')
+  ];
+  return theme('table', array('header' => $header, 'rows'=> $rows));
+}
